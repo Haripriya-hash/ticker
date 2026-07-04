@@ -1,0 +1,278 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Archivo:wght@500;600;700;800&display=swap');
+
+:root {
+    --paper: #FAF7EF;
+    --paper-raised: #FFFFFF;
+    --ink: #1B1F23;
+    --ink-soft: #5B5F66;
+    --rule: #E1DACB;
+    --gold: #B8892B;
+    --gold-deep: #8C6A22;
+    --up-green: #2F5233;
+    --down-red: #A23B3B;
+    --shadow: rgba(27, 31, 35, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Archivo', -apple-system, BlinkMacSystemFont, sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+/* ---------- Ticker tape banner: the signature element ---------- */
+.ticker-banner {
+    background: var(--ink);
+    color: var(--paper);
+    overflow: hidden;
+    white-space: nowrap;
+    border-bottom: 3px solid var(--gold);
+}
+
+.ticker-track {
+    display: inline-flex;
+    animation: scroll-tape 32s linear infinite;
+    padding: 10px 0;
+}
+
+.ticker-track span {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.04em;
+    padding: 0 1.75rem;
+    border-right: 1px solid rgba(250, 247, 239, 0.2);
+}
+
+.ticker-track span.up { color: #6FBF73; }
+.ticker-track span.down { color: #E08787; }
+
+@keyframes scroll-tape {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ticker-track {
+        animation: none;
+    }
+}
+
+/* ---------- Layout ---------- */
+.page {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1.5rem;
+}
+
+.brand {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 800;
+    font-size: 1.6rem;
+    letter-spacing: -0.02em;
+    margin: 0 0 2rem 0;
+    color: var(--ink);
+}
+
+.brand span {
+    color: var(--gold-deep);
+}
+
+.card {
+    background: var(--paper-raised);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    box-shadow: 0 8px 24px var(--shadow);
+    padding: 2.25rem 2.25rem 2rem;
+    width: 100%;
+    max-width: 420px;
+}
+
+.card h1 {
+    font-size: 1.35rem;
+    margin: 0 0 0.35rem 0;
+    letter-spacing: -0.01em;
+}
+
+.card .subtitle {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+    margin: 0 0 1.75rem 0;
+}
+
+/* ---------- Forms ---------- */
+.field {
+    margin-bottom: 1.15rem;
+}
+
+.field label {
+    display: block;
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--ink-soft);
+    margin-bottom: 0.4rem;
+}
+
+.field input {
+    width: 100%;
+    padding: 0.7rem 0.85rem;
+    border: 1.5px solid var(--rule);
+    border-radius: 6px;
+    font-size: 1rem;
+    font-family: inherit;
+    background: var(--paper);
+    color: var(--ink);
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.field input:focus {
+    outline: none;
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(184, 137, 43, 0.18);
+}
+
+.field-error {
+    color: var(--down-red);
+    font-size: 0.82rem;
+    margin-top: 0.35rem;
+}
+
+.btn {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: none;
+    border-radius: 6px;
+    background: var(--ink);
+    color: var(--paper);
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+    cursor: pointer;
+    transition: transform 0.1s ease, background 0.15s ease;
+}
+
+.btn:hover {
+    background: var(--gold-deep);
+}
+
+.btn:active {
+    transform: translateY(1px);
+}
+
+.form-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+}
+
+.form-footer a {
+    color: var(--gold-deep);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.form-footer a:hover {
+    text-decoration: underline;
+}
+
+/* ---------- Alerts ---------- */
+.alert {
+    border-radius: 6px;
+    padding: 0.75rem 1rem;
+    font-size: 0.88rem;
+    margin-bottom: 1.25rem;
+}
+
+.alert-error {
+    background: #FBEAEA;
+    color: var(--down-red);
+    border: 1px solid #EFC9C9;
+}
+
+.alert-success {
+    background: #EAF1EA;
+    color: var(--up-green);
+    border: 1px solid #C9DFC9;
+}
+
+/* ---------- Dashboard ---------- */
+.dashboard-header {
+    width: 100%;
+    max-width: 640px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.75rem;
+}
+
+.dashboard-header .greeting {
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+}
+
+.dashboard-header .greeting strong {
+    color: var(--ink);
+}
+
+.logout-form button {
+    background: none;
+    border: 1.5px solid var(--rule);
+    border-radius: 6px;
+    padding: 0.45rem 0.9rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ink-soft);
+    cursor: pointer;
+}
+
+.logout-form button:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+}
+
+.card.wide {
+    max-width: 640px;
+}
+
+.quote-result {
+    margin-top: 1.75rem;
+    padding: 1.5rem;
+    border: 1.5px dashed var(--gold);
+    border-radius: 8px;
+    background: #FFFDF6;
+    text-align: center;
+}
+
+.quote-result .symbol {
+    font-family: 'Space Mono', monospace;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+}
+
+.quote-result .open-price {
+    font-family: 'Space Mono', monospace;
+    font-weight: 700;
+    font-size: 2.4rem;
+    color: var(--up-green);
+    margin: 0.35rem 0 0.1rem;
+}
+
+.quote-result .open-label {
+    font-size: 0.78rem;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+}

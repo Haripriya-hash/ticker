@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard · Ticker</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="ticker-banner">
+    <div class="ticker-track">
+        <span class="up">AAPL 214.32 &#9650;</span>
+        <span class="down">TSLA 178.05 &#9660;</span>
+        <span class="up">MSFT 441.10 &#9650;</span>
+        <span class="up">NVDA 129.87 &#9650;</span>
+        <span class="down">AMZN 198.44 &#9660;</span>
+        <span class="up">GOOGL 172.63 &#9650;</span>
+        <span class="up">AAPL 214.32 &#9650;</span>
+        <span class="down">TSLA 178.05 &#9660;</span>
+        <span class="up">MSFT 441.10 &#9650;</span>
+        <span class="up">NVDA 129.87 &#9650;</span>
+        <span class="down">AMZN 198.44 &#9660;</span>
+        <span class="up">GOOGL 172.63 &#9650;</span>
+    </div>
+</div>
+
+<div class="page">
+    <div class="dashboard-header">
+        <div class="brand" style="margin-bottom:0;">ticker<span>.</span></div>
+        <div style="display:flex; align-items:center; gap:1.25rem;">
+            <span class="greeting">Signed in as <strong th:text="${username}">user</strong></span>
+            <a th:href="@{/change-password}" style="font-size:0.85rem; color:var(--ink-soft); text-decoration:none; font-weight:600;">Change password</a>
+            <form class="logout-form" th:action="@{/logout}" method="post">
+                <button type="submit">Log out</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="card wide">
+        <h1>Look up an opening price</h1>
+        <p class="subtitle">Enter a stock symbol to fetch today's opening price from Finnhub.</p>
+
+        <div class="alert alert-error" th:if="${errorMessage}" th:text="${errorMessage}"></div>
+
+        <form th:action="@{/stock-lookup}" th:object="${stockLookupForm}" method="post">
+            <div class="field">
+                <label for="symbol">Stock symbol</label>
+                <input type="text" id="symbol" th:field="*{symbol}" placeholder="e.g. AAPL" autofocus>
+                <div class="field-error" th:if="${#fields.hasErrors('symbol')}" th:errors="*{symbol}"></div>
+            </div>
+            <button type="submit" class="btn">Get opening price</button>
+        </form>
+
+        <div class="quote-result" th:if="${openPrice != null}">
+            <div class="symbol" th:text="${symbol}">AAPL</div>
+            <div class="open-price" th:text="${'$' + #numbers.formatDecimal(openPrice, 1, 2)}">$0.00</div>
+            <div class="open-label">Opening price</div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

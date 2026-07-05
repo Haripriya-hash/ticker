@@ -1,6 +1,6 @@
 # Ticker
 
-A small Spring Boot + Thymeleaf app built for the RTS Labs coding demonstration.
+A Spring Boot + Thymeleaf app built for the RTS Labs coding demonstration.
 
 Users can sign up, log in, and log out. Once logged in, they can look up a stock
 symbol and see today's opening price, pulled live from [Finnhub](https://finnhub.io).
@@ -13,6 +13,17 @@ The lookup form is only reachable when authenticated.
 - Spring Data JPA + PostgreSQL (H2 for tests)
 - Thymeleaf for server-rendered views
 - Finnhub `/quote` API for stock data
+
+## Features
+
+- User registration, login, and logout
+- Secure password storage with BCrypt
+- Authenticated stock lookup dashboard
+- Real-time stock opening prices via Finnhub
+- Password change functionality
+- PostgreSQL-backed persistence
+- Integration and security testing
+- Docker deployment support
 
 ## Project layout
 
@@ -42,7 +53,7 @@ Dockerfile                            Used for deployment (see "Deploying" below
 
 1. **Get a Finnhub API key** — sign up free at [finnhub.io](https://finnhub.io), copy your API key.
 
-2. **Start Postgres** (or point at any Postgres instance you already have):
+2. **Start Postgres** :
 
    ```bash
    docker run --name ticker-db -e POSTGRES_USER=ticker -e POSTGRES_PASSWORD=choose_your_own_password \
@@ -53,7 +64,7 @@ Dockerfile                            Used for deployment (see "Deploying" below
    or the installer at [postgresql.org/download](https://www.postgresql.org/download/)
    on Windows) and create a `ticker` database/user manually instead.
 
-3. **Set environment variables and run.** The values are the same everywhere —
+3. **Set environment variables and run.** The values are the same everywhere 
    only the syntax for setting them differs by shell:
 
    **macOS / Linux (bash or zsh):**
@@ -97,18 +108,8 @@ Dockerfile                            Used for deployment (see "Deploying" below
    > from environment variables at runtime; nothing sensitive is hardcoded in
    > source, and `.gitignore` already excludes local `.env` files if you use one.
 
-   **Using an IDE instead (IntelliJ, VS Code, Eclipse):** most IDEs let you
-   set environment variables directly in the run configuration rather than
-   the terminal, which persists across sessions:
-   - **IntelliJ**: Run → Edit Configurations → select the Spring Boot config →
-     find "Environment variables" → click the folder icon → add each
-     key/value pair
-   - **VS Code** (with the Java/Spring extensions): add an `env` block to
-     `.vscode/launch.json` with the same four key/value pairs
-   - **Eclipse**: Run → Run Configurations → Environment tab → Add
 
-   The app starts on `http://localhost:8080`. Tables are created automatically
-   (`spring.jpa.hibernate.ddl-auto=update`).
+   The app starts on `http://localhost:8080`.
 
 4. Visit `http://localhost:8080`, sign up, log in, try looking up a symbol
    like `AAPL` or `MSFT`, and try changing your password from the dashboard.
@@ -137,46 +138,24 @@ Covered happy paths:
 
 ## Deploying (Render)
 
-This repo includes a `Dockerfile`, which is the recommended path — Render's
-"auto-detect" build sometimes defaults to a Node.js environment for repos
-without an obvious language marker, which fails immediately since there's no
-`mvn` binary in that environment. Using Docker sidesteps that entirely.
 
-1. Push this repo to GitHub (the `Dockerfile` needs to be at the repo root).
-2. In Render, create a **PostgreSQL** instance first.
-3. Create a **Web Service** from the repo:
-   - **Environment**: **Docker** — Render should auto-detect the `Dockerfile`
-     at the root. If it doesn't offer Docker as an option, delete the service
-     and recreate it; the environment/runtime choice appears to be locked in
-     at creation time, not editable afterward in Settings.
-   - **Environment variables** — from your Render Postgres instance's
-     **Connections** section, note the *Internal Database URL*. It looks like
-     `postgresql://USERNAME:PASSWORD@HOST/DBNAME` — split it apart rather than
-     pasting it in directly, since Spring Boot's JDBC driver needs the pieces
-     separated and prefixed with `jdbc:`:
-     - `FINNHUB_API_KEY` — your Finnhub key
-     - `DATABASE_URL` — `jdbc:postgresql://HOST/DBNAME` (no username/password
-       embedded in this string — that caused a `URL must start with 'jdbc'`
-       error, and later a "Driver claims to not accept jdbcUrl" error, the
-       first two times through)
-     - `DATABASE_USERNAME` — just the username portion
-     - `DATABASE_PASSWORD` — just the password portion
-   - Render sets `PORT` automatically; `application.properties` already reads it.
-4. Deploy. First build takes several minutes (downloading a full Maven+JDK
-   image layer). Once live, visit the Render URL, sign up, and confirm the
-   stock lookup and password change both work end to end.
-5. **Free tier note**: Render spins the service down after 15 minutes of
-   inactivity, so a cold visit can take 30-60 seconds to wake back up. A free
-   uptime monitor (e.g. [UptimeRobot](https://uptimerobot.com), pinging every
-   5 minutes) keeps it warm if that matters for your use case.
+## Deploying (Render)
 
-## Notes on design choices
+1. Push the repository to GitHub.
+2. Create a PostgreSQL instance in Render.
+3. Create a Docker-based Web Service from the repository.
+4. Configure the following environment variables:
 
-- Passwords are hashed with BCrypt via Spring Security; nothing is ever stored
-  or logged in plaintext.
-- The Finnhub call is isolated in `FinnhubService` so it's easy to mock in
-  tests and easy to swap for a different data source later.
-- `spring.jpa.hibernate.ddl-auto=update` is fine for a demo; a real production
-  setup would use a migration tool like Flyway instead.
-- CSS is hand-written (no Bootstrap) with a small ticker-tape motif at the top
-  of each page as a nod to the subject matter.
+   - FINNHUB_API_KEY
+   - DATABASE_URL
+   - DATABASE_USERNAME
+   - DATABASE_PASSWORD
+
+5. Deploy the application.
+
+## Summary
+
+Ticker is a Spring Boot web application that demonstrates user authentication, secure password management, PostgreSQL persistence, external API integration, automated testing, and Docker-based deployment. Authenticated users can search for stock symbols and view opening-price data retrieved from Finnhub.
+
+
+
